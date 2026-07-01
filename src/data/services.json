@@ -1,0 +1,138 @@
+{
+  "defaultService": "dagpenger",
+  "user": {
+    "name": "Charlie Jensen",
+    "status": "Ingen nye oppgaver",
+    "role": "Privatperson"
+  },
+  "services": {
+    "dagpenger": {
+      "title": "Dagpenger",
+      "sak": {
+        "heading": "Saken din",
+        "statusLines": [
+          "Du har dagpenger",
+          "36 uker igjen",
+          "Dagsats 350 kroner",
+          "Neste utbetaling...kr 18 450"
+        ],
+        "gaugeLabel": "36 uker",
+        "actionLabel": "Saksoversikt"
+      },
+      "behandling": {
+        "title": "Søknad om dagpenger",
+        "subtitle": "Mottatt 16. august.",
+        "tag": "Godkjent",
+        "tagVariant": "success",
+        "link": "Du har fått innvilget dagpenger"
+      },
+      "sakActions": ["Meld endring", "Send klage"],
+      "meldekort": {
+        "heading": "Meldekort",
+        "items": [
+          {
+            "heading": "Timer uke 6 og 7",
+            "period": "14. februar - 27. februar",
+            "meta": "Send 27. feb",
+            "state": "upcoming"
+          },
+          {
+            "heading": "Timer uke 4 og 5",
+            "period": "31. januar - 13. februar",
+            "state": "action"
+          },
+          {
+            "heading": "Timer uke 3 og 4",
+            "period": "15. januar - 30. januar",
+            "meta": "16 450,-",
+            "state": "done"
+          },
+          {
+            "heading": "Timer uke 1 og 2",
+            "period": "1. januar - 14. januar",
+            "meta": "16 450,-",
+            "state": "done"
+          }
+        ]
+      },
+      "soknad": {
+        "referanse": "102 458 125",
+        "mottatt": "16. august 2025",
+        "status": "Står i kø",
+        "statusVariant": "warning",
+        "forventetSvar": "2. september",
+        "infoBox": "Informasjon om status",
+        "dokBox": "Sende dokumentasjon",
+        "timelineHeading": "Dette har skjedd",
+        "events": [
+          {
+            "title": "Vi har mottatt søknaden din om dagpenger",
+            "date": "1 januar 2026",
+            "links": ["Se/endre søknaden", "Trekk søknaden"]
+          },
+          {
+            "title": "Vi har mottatt arbeidsavtale fra deg",
+            "date": "14 januar 2026",
+            "links": ["Se vedlegget"]
+          },
+          {
+            "title": "Vi har mottatt bekreftelse på sluttårsak fra deg",
+            "date": "14 januar 2026",
+            "links": ["Se vedlegget"]
+          }
+        ]
+      },
+      "tilpassetHeading": "Situasjonstilpasset innhold"
+    },
+    "sykepenger": {
+      "title": "Sykepenger",
+      "sak": {
+        "heading": "Saken din",
+        "statusLines": [
+          "Du er sykmeldt",
+          "Sykmeldt 80 %",
+          "Sykepenger til 15. mars",
+          "Neste utbetaling...kr 22 300"
+        ],
+        "gaugeLabel": "12 uker",
+        "actionLabel": "Saksoversikt"
+      },
+      "behandling": {
+        "title": "Søknad om sykepenger",
+        "subtitle": "Mottatt 3. januar.",
+        "tag": "Under behandling",
+        "tagVariant": "info",
+        "link": "Søknaden din er under behandling"
+      },
+      "sakActions": ["Meld endring", "Send klage"],
+      "soknad": {
+        "referanse": "204 771 903",
+        "mottatt": "3. januar 2026",
+        "status": "Under behandling",
+        "statusVariant": "info",
+        "forventetSvar": "20. januar",
+        "infoBox": "Informasjon om status",
+        "dokBox": "Sende dokumentasjon",
+        "timelineHeading": "Dette har skjedd",
+        "events": [
+          {
+            "title": "Vi har mottatt søknaden din om sykepenger",
+            "date": "3 januar 2026",
+            "links": ["Se/endre søknaden", "Trekk søknaden"]
+          },
+          {
+            "title": "Vi har mottatt sykmelding fra legen din",
+            "date": "3 januar 2026",
+            "links": ["Se vedlegget"]
+          },
+          {
+            "title": "Vi har mottatt inntektsmelding fra arbeidsgiver",
+            "date": "8 januar 2026",
+            "links": ["Se vedlegget"]
+          }
+        ]
+      },
+      "tilpassetHeading": "Situasjonstilpasset innhold"
+    }
+  }
+}

@@ -1,0 +1,214 @@
+---
+// Dagpenger / Sykepenger – innlogget produktside (prototype)
+// Innhold hentes fra src/data/services.json slik at prototypen kan veksle
+// mellom ulike tjenester.
+import styles from "./_index.module.css";
+import data from "../data/services.json";
+
+interface MeldekortItem {
+  heading: string;
+  period: string;
+  meta?: string;
+  state: "upcoming" | "action" | "done";
+}
+interface Service {
+  title: string;
+  sak: {
+    heading: string;
+    statusLines: string[];
+    gaugeLabel: string;
+    actionLabel: string;
+  };
+  behandling: {
+    title: string;
+    subtitle: string;
+    tag: string;
+    tagVariant: "success" | "info";
+    link: string;
+  };
+  sakActions: string[];
+  meldekort?: { heading: string; items: MeldekortItem[] };
+  tilpassetHeading: string;
+}
+
+const services = data.services as Record<string, Service>;
+
+export function getStaticPaths() {
+  return Object.keys((data.services as Record<string, unknown>)).map((service) => ({
+    params: { service },
+  }));
+}
+
+const { service } = Astro.params;
+const svc = services[service as string];
+const { user } = data;
+const serviceList = Object.entries(services).map(([id, s]) => ({ id, title: s.title }));
+
+const tagClass: Record<string, string> = {
+  success: styles.tagSuccess,
+  info: styles.tagInfo,
+};
+
+const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="#0067C5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+---
+
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{svc.title} – Min side</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;650;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class={styles.page}>
+      <!-- Meny -->
+      <header class={styles.meny}>
+        <div class={styles.logoRole}>
+          <span class={styles.logo}>NAV</span>
+          <span class={styles.divider}></span>
+          <span class={styles.role}>
+            {user.role}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="#49515e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <button class={styles.menyBtn} type="button">
+          Meny
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#005bb6" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+
+      <!-- Tjenestevelger (kun for prototypen) -->
+      <nav class={styles.switcher} aria-label="Velg tjeneste">
+        {serviceList.map((s) => (
+          <a
+            href={`/${s.id}`}
+            class:list={[styles.switcherPill, s.id === service && styles.switcherActive]}
+            aria-current={s.id === service ? "page" : undefined}
+          >
+            {s.title}
+          </a>
+        ))}
+      </nav>
+
+      <main class={styles.content}>
+        <!-- Bruker -->
+        <div class={styles.user}>
+          <div class={styles.userText}>
+            <p class={styles.userName}>{user.name}</p>
+            <p class={styles.userStatus}>{user.status}</p>
+          </div>
+          <div class={styles.avatar} aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4.5 20a7.5 7.5 0 0115 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+
+        <!-- Brødsmuler -->
+        <nav class={styles.breadcrumb} aria-label="Brødsmulesti">
+          <a href="#">Min side</a>
+          <span>/</span>
+        </nav>
+
+        <h1 class={styles.h1}>{svc.title}</h1>
+
+        <!-- Statuskort -->
+        <section class={styles.statuskort} aria-label="Status">
+          <!-- Sak -->
+          <article class:list={[styles.card, styles.sak]}>
+            <h2 class={styles.h2}>{svc.sak.heading}</h2>
+            <div class={styles.sakStatus}>
+              <div class={styles.sakText}>
+                {svc.sak.statusLines.map((line) => <p>{line}</p>)}
+              </div>
+              <div class={styles.gauge} role="img" aria-label={svc.sak.gaugeLabel}>
+                <svg viewBox="0 0 90 90" width="86" height="88" aria-hidden="true">
+                  <circle cx="45" cy="45" r="41" fill="#f8e5dd" />
+                  <path
+                    d="M45 4a41 41 0 11-29 12"
+                    fill="none"
+                    stroke="#874e3b"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span class={styles.gaugeLabel}>{svc.sak.gaugeLabel}</span>
+              </div>
+            </div>
+            <a class={styles.btnSecondary} href="#">
+              {svc.sak.actionLabel}
+              <Fragment set:html={chevronRight} />
+            </a>
+          </article>
+
+          <!-- Behandling -->
+          <article class:list={[styles.card, styles.behandling]}>
+            <div class={styles.behandlingHeader}>
+              <div class={styles.behandlingTitle}>
+                <h2 class={styles.h2}>{svc.behandling.title}</h2>
+                <p class={styles.muted}>{svc.behandling.subtitle}</p>
+              </div>
+              <span class:list={[styles.tag, tagClass[svc.behandling.tagVariant]]}>
+                {svc.behandling.tag}
+              </span>
+            </div>
+            <a class={styles.behandlingLink} href={`/${service}/soknad`}>
+              <span>{svc.behandling.link}</span>
+              <Fragment set:html={chevronRight} />
+            </a>
+          </article>
+
+          <!-- Sak actions -->
+          <div class={styles.sakActions}>
+            {svc.sakActions.map((label) => (
+              <a class:list={[styles.card, styles.action]} href="#">
+                {label}
+                <Fragment set:html={chevronRight} />
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <!-- Meldekort -->
+        {svc.meldekort && (
+          <section class={styles.meldekort} aria-label="Meldekort">
+            <h2 class={styles.h2}>{svc.meldekort.heading}</h2>
+            <ul class={styles.meldekortList}>
+              {svc.meldekort.items.map((m) => (
+                <li class={styles.meldekortItem}>
+                  <div class={styles.meldekortContent}>
+                    <p class={styles.mkHeading}>{m.heading}</p>
+                    <p class={styles.mkPeriod}>{m.period}</p>
+                  </div>
+                  {m.state === "action" && (
+                    <button class={styles.btnAccent} type="button">Send meldekort</button>
+                  )}
+                  {m.state === "upcoming" && <span class={styles.mkMeta}>{m.meta}</span>}
+                  {m.state === "done" && (
+                    <span class={styles.mkDone}>
+                      {m.meta}
+                      <Fragment set:html={chevronRight} />
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- Situasjonstilpasset innhold -->
+        <section class={styles.tilpasset} aria-label="Situasjonstilpasset innhold">
+          <h2 class={styles.h2}>{svc.tilpassetHeading}</h2>
+          <div class:list={[styles.placeholder, styles.tall]}></div>
+          <div class={styles.placeholderRow}>
+            <div class:list={[styles.placeholder, styles.short]}></div>
+            <div class:list={[styles.placeholder, styles.short]}></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
