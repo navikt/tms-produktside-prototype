@@ -6,6 +6,6 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   base: '/prototype/produktside',
   redirects: {
-    '/': '/dagpenger',
+    '/': '/prototype/produktside/dagpenger',
   },
 });
