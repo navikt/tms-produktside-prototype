@@ -1,0 +1,27 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: tms-produktside-prototype
+  namespace: min-side
+  labels:
+    team: min-side
+spec:
+  image: {{ image }}
+  port: 3000
+  liveness:
+    path: /produktside-prototype/api/internal/isAlive
+    initialDelay: 10
+  readiness:
+    path: /produktside-prototype/api/internal/isReady
+    initialDelay: 10
+  replicas:
+    min: 1
+    max: 2
+  ingresses:
+    - "https://www.ansatt.dev.nav.no/produktside-prototype"
+  resources:
+    requests:
+      cpu: "20m"
+      memory: 128Mi
+    limits:
+      memory: 512Mi
