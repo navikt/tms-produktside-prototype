@@ -1,0 +1,162 @@
+---
+// Søknad om [service] – underside (prototype)
+// Lenket fra "Søknad om ..."-kortet på tjenestesiden.
+import styles from "../_index.module.css";
+import data from "../../data/services.json";
+
+interface TimelineEvent {
+  title: string;
+  date: string;
+  links: string[];
+}
+interface Soknad {
+  referanse: string;
+  mottatt: string;
+  status: string;
+  statusVariant: "success" | "info" | "warning";
+  forventetSvar: string;
+  infoBox: string;
+  dokBox: string;
+  timelineHeading: string;
+  events: TimelineEvent[];
+}
+interface Service {
+  title: string;
+  behandling: { title: string };
+  soknad: Soknad;
+}
+
+const services = data.services as Record<string, Service>;
+
+export function getStaticPaths() {
+  return Object.keys(data.services as Record<string, unknown>).map((service) => ({
+    params: { service },
+  }));
+}
+
+const { service } = Astro.params;
+const svc = services[service as string];
+const { user } = data;
+const soknad = svc.soknad;
+
+const tagClass: Record<string, string> = {
+  success: styles.tagSuccess,
+  info: styles.tagInfo,
+  warning: styles.tagWarning,
+};
+
+const checkmark = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 13l4 4 10-10" stroke="#202733" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+---
+
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{svc.behandling.title} – Min side</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;650;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class={styles.page}>
+      <!-- Meny -->
+      <header class={styles.meny}>
+        <div class={styles.logoRole}>
+          <span class={styles.logo}>NAV</span>
+          <span class={styles.divider}></span>
+          <span class={styles.role}>
+            {user.role}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="#49515e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <button class={styles.menyBtn} type="button">
+          Meny
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#005bb6" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+
+      <main class={styles.subPage}>
+        <!-- Bruker -->
+        <div class={styles.user}>
+          <div class={styles.userText}>
+            <p class={styles.userName}>{user.name}</p>
+            <p class={styles.userStatus}>{user.status}</p>
+          </div>
+          <div class={styles.avatar} aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4.5 20a7.5 7.5 0 0115 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+
+        <div class={styles.subHeader}>
+          <!-- Brødsmuler -->
+          <nav class={styles.breadcrumb} aria-label="Brødsmulesti">
+            <a href="#">Min side</a>
+            <span>/</span>
+            <a href={`/${service}`}>{svc.title}</a>
+          </nav>
+
+          <h1 class={styles.h1}>{svc.behandling.title}</h1>
+        </div>
+
+        <!-- Metadata -->
+        <dl class={styles.metadata}>
+          <div class={styles.metaRow}>
+            <dt>Referanse nr</dt>
+            <dd>{soknad.referanse}</dd>
+          </div>
+          <div class={styles.metaRow}>
+            <dt>Mottatt</dt>
+            <dd>{soknad.mottatt}</dd>
+          </div>
+          <div class={styles.metaRow}>
+            <dt>Status</dt>
+            <dd>
+              <span class:list={[styles.tag, tagClass[soknad.statusVariant]]}>
+                {soknad.status}
+              </span>
+            </dd>
+          </div>
+          <div class={styles.metaRow}>
+            <dt>Forventet svar</dt>
+            <dd>{soknad.forventetSvar}</dd>
+          </div>
+        </dl>
+
+        <!-- Innholdsblokker -->
+        <div class={styles.boxes}>
+          <div class:list={[styles.box, styles.boxInfo]}>{soknad.infoBox}</div>
+          <div class:list={[styles.box, styles.boxDok]}>{soknad.dokBox}</div>
+        </div>
+      </main>
+
+      <!-- Dette har skjedd -->
+      <section class={styles.timeline} aria-label={soknad.timelineHeading}>
+        <h2 class={styles.timelineHeading}>{soknad.timelineHeading}</h2>
+        <ol class={styles.timelineList}>
+          {soknad.events.map((event, index) => (
+            <li class={styles.timelineItem}>
+              <div class={styles.timelineIndicator}>
+                <span class={styles.timelineDot}>
+                  <Fragment set:html={checkmark} />
+                </span>
+                {index < soknad.events.length - 1 && <span class={styles.timelineLine}></span>}
+              </div>
+              <div class={styles.timelineContent}>
+                <p class={styles.timelineTitle}>{event.title}</p>
+                <p class={styles.timelineDate}>{event.date}</p>
+                {event.links.length > 0 && (
+                  <div class={styles.timelineLinks}>
+                    {event.links.map((link) => <a href="#">{link}</a>)}
+                  </div>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
+  </body>
+</html>
