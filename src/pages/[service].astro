@@ -43,6 +43,7 @@ const { service } = Astro.params;
 const svc = services[service as string];
 const { user } = data;
 const serviceList = Object.entries(services).map(([id, s]) => ({ id, title: s.title }));
+const baseUrl = import.meta.env.BASE_URL;
 
 const tagClass: Record<string, string> = {
   success: styles.tagSuccess,
@@ -86,7 +87,7 @@ const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none
       <nav class={styles.switcher} aria-label="Velg tjeneste">
         {serviceList.map((s) => (
           <a
-            href={`/${s.id}`}
+            href={`${baseUrl}/${s.id}`}
             class:list={[styles.switcherPill, s.id === service && styles.switcherActive]}
             aria-current={s.id === service ? "page" : undefined}
           >
@@ -155,7 +156,7 @@ const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none
                 {svc.behandling.tag}
               </span>
             </div>
-            <a class={styles.behandlingLink} href={`${import.meta.env.BASE_URL}/${service}/soknad`}>
+            <a class={styles.behandlingLink} href={`${baseUrl}/${service}/soknad`}>
               <span>{svc.behandling.link}</span>
               <Fragment set:html={chevronRight} />
             </a>
