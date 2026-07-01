@@ -9,16 +9,16 @@ spec:
   image: {{ image }}
   port: 3000
   liveness:
-    path: /prototype/produktside/api/internal/isAlive
+    path: /produktside-prototype/api/internal/isAlive
     initialDelay: 10
   readiness:
-    path: /prototype/produktside/api/internal/isReady
+    path: /produktside-prototype/api/internal/isReady
     initialDelay: 10
   replicas:
     min: 1
     max: 2
   ingresses:
-    - "https://www.ansatt.dev.nav.no/prototype/produktside"
+    - "https://www.ansatt.dev.nav.no/produktside-prototype"
   resources:
     requests:
       cpu: "20m"

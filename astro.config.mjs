@@ -4,8 +4,8 @@ import node from '@astrojs/node';
 export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
-  base: '/prototype/produktside',
+  base: '/produktside-prototype',
   redirects: {
-    '/': '/prototype/produktside/dagpenger',
+    '/': '/produktside-prototype/dagpenger',
   },
 });
