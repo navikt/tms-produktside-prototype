@@ -38,6 +38,7 @@ const { service } = Astro.params;
 const svc = services[service as string];
 const { user } = data;
 const soknad = svc.soknad;
+const baseUrl = import.meta.env.BASE_URL;
 
 const tagClass: Record<string, string> = {
   success: styles.tagSuccess,
@@ -149,7 +150,9 @@ const checkmark = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" x
                 <p class={styles.timelineDate}>{event.date}</p>
                 {event.links.length > 0 && (
                   <div class={styles.timelineLinks}>
-                    {event.links.map((link) => <a href="#">{link}</a>)}
+                    {event.links.map((link) => (
+                      <a href={`${baseUrl}/${service}/dokument`}>{link}</a>
+                    ))}
                   </div>
                 )}
               </div>
