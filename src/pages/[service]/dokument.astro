@@ -27,6 +27,9 @@ if (!svc) {
   return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
 }
 const { user } = data;
+if (!svc) {
+  return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
+}
 const dokument = svc.dokument;
 const baseUrl = import.meta.env.BASE_URL;
 ---

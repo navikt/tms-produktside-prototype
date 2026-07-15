@@ -41,6 +41,9 @@ export function getStaticPaths() {
 
 const { service } = Astro.params;
 const svc = services[service as string];
+if (!svc) {
+  return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
+}
 const { user } = data;
 const serviceList = Object.entries(services).map(([id, s]) => ({ id, title: s.title }));
 const baseUrl = import.meta.env.BASE_URL;
