@@ -82,6 +82,10 @@
           }
         ]
       },
+      "dokument": {
+        "title": "Dokument/data",
+        "placeholder": "Dokument eller data"
+      },
       "tilpassetHeading": "Situasjonstilpasset innhold"
     },
     "sykepenger": {
@@ -131,6 +135,10 @@
             "links": ["Se vedlegget"]
           }
         ]
+      },
+      "dokument": {
+        "title": "Dokument/data",
+        "placeholder": "Dokument eller data"
       },
       "tilpassetHeading": "Situasjonstilpasset innhold"
     }
