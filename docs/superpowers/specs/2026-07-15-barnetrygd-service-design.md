@@ -2,64 +2,57 @@
 
 ## Problem
 
-Implement the Figma "Barnetrygd" innlogget-produktside (node `378:19162`) as a
-new third service in `tms-produktside-prototype`, alongside dagpenger and
-sykepenger, reusing the data-driven `[service].astro` template and the
-DESIGN.md-tokenised `_index.module.css`.
+Implement Barnetrygd as a new third service in `tms-produktside-prototype`.
+The original Figma frame (node `378:19162`) is outdated compared with the
+current dagpenger/sykepenger service design, so Barnetrygd should use the same
+overall landing-page structure as the existing services and vary only by data.
 
 ## Goal
 
-`/produktside-prototype/barnetrygd` renders the Figma landing frame; its links
-resolve to working subpages; dagpenger and sykepenger stay visually unchanged.
+`/produktside-prototype/barnetrygd` renders with the same shared white-card
+service layout as dagpenger/sykepenger; its links resolve to working subpages;
+dagpenger and sykepenger stay visually unchanged.
 
-## Landing layout (from Figma)
+## Landing layout
 
-- **Status card** — one rounded (12px) container on a soft grey surface
-  (`#f5f6f7`) holding two joined sub-cards (inner corners 4px):
-  - *Sak*: "Status" heading + success tag "Godkjent"; status lines ("Barnetrygd
-    for Ola Nordmann", "Fram til 1. januar 2034", "Neste utbetaling…kr 2012"); a
-    neutral gauge with "…" label. No secondary button.
-  - *Behandling*: "Søknad utvidet barnetrygd" + subtitle "Mottatt 16. august." +
-    warning tag "Venter på deg"; body "Vi mangler 2 vedlegg fra deg. Frist for å
-    ettersende dem er 30. august."; accent button "Send vedlegg".
-- **Sak actions**: "Meld endring" + "Send klage" (row), then full-width
-  "Oversikt over saken din" → saksoversikt.
-- **Situasjonstilpasset innhold**: heading + placeholder blocks (as today).
-- **Historikk** (on landing): small-dot timeline, one entry ("20 august 2025" /
-  "Søknad mottatt" / links "Se søknaden", "Trekk søknaden"), then
-  "Se hele saksoversikten" → saksoversikt.
-- **No meldekort.**
+- **Saken din card**: same white raised `.card + .sak` layout as the other
+  services, heading "Saken din", Barnetrygd status lines, the existing
+  decorative gauge, and the secondary "Saksoversikt" button.
+- **Behandling card**: same white raised `.card + .behandling` layout, title
+  "Søknad utvidet barnetrygd", subtitle "Mottatt 16. august.", warning tag
+  "Venter på deg", and a link row "Vi mangler 2 vedlegg fra deg" to `/soknad`.
+- **Sak actions**: same two-card row ("Meld endring", "Send klage").
+- **Situasjonstilpasset innhold**: same placeholder section as today.
+- **No meldekort** for Barnetrygd, matching the existing optional-data pattern
+  (Sykepenger also omits meldekort).
 
-## Data model additions (`services.json`, all additive/optional)
+## Data model
 
-- `sak.tag`, `sak.tagVariant`; `sak.actionLabel` becomes optional; optional
-  neutral gauge.
-- `behandling.body`; `behandling.button { label, href }`; `behandling.link`
-  optional.
-- `saksoversiktLink` (full-width action label).
-- `historikk { entries: [{ date, title, links[] }], seHeleLabel }`.
-- Subpage blocks `soknad`, `saksoversikt`, `dokument` (authored content so links
-  resolve; not part of the provided frame).
+Barnetrygd uses the existing service shape:
+
+- `sak.heading`, `sak.statusLines`, `sak.gaugeLabel`, `sak.actionLabel`
+- `behandling.title`, `behandling.subtitle`, `behandling.tag`,
+  `behandling.tagVariant`, `behandling.link`
+- `sakActions`, `tilpassetHeading`
+- `soknad`, `saksoversikt`, `dokument` blocks so existing subpage templates work
+
+Do not add Barnetrygd-only landing fields such as `sak.tag`, `gaugeVariant`,
+`behandling.body`, `behandling.button`, `saksoversiktLink`, or `historikk`.
 
 ## Template (`[service].astro`)
 
-Extend the `Service` interface; render each new piece only when its data is
-present, so dagpenger/sykepenger output is unchanged:
-- status tag; conditional `.btnSecondary`; combined-status-card modifier;
-- behandling `subtitle` / optional `body` / optional accent `button` / optional
-  `link`;
-- full-width "Oversikt over saken din" action;
-- landing Historikk section reusing the small-dot timeline + "Se hele
-  saksoversikten" link.
+Keep the shared rendering path for every service:
+
+- `sak.actionLabel` is required and always renders the secondary button.
+- `behandling.link` is required and always renders the link row.
+- No combined-status-card branch, no Barnetrygd-only CTA branch, and no landing
+  Historikk branch.
 
 ## Styles (`_index.module.css`)
 
-New tokens (DESIGN.md/Aksel): `--ax-bg-success-moderate #d5f6db`,
-`--ax-bg-warning-moderate #ffebc7`, `--ax-text-info #002942`,
-`--ax-accent-900 #004ea3`, and a solid soft-surface token `#f5f6f7`.
-New classes only (existing base classes untouched): combined status-card
-variant, "moderate" success/warning tags, behandling body text, neutral gauge,
-landing historikk block (reuse `.dotList`/timeline styles). Reuse `.btnAccent`.
+Reuse the existing tokenised styles from the DESIGN.md migration. Do not add
+Barnetrygd-only `surface-soft`, moderate tag, combined-card, or landing
+Historikk classes.
 
 ## Deliberate deviations
 
@@ -71,8 +64,10 @@ landing historikk block (reuse `.dotList`/timeline styles). Reuse `.btnAccent`.
 
 ## Verification
 
-`pnpm build` succeeds; preview `/produktside-prototype/barnetrygd` matches the
-frame; all landing links resolve (200, no 500); dagpenger/sykepenger unchanged.
+`pnpm build` succeeds; `/produktside-prototype/barnetrygd` and subpages return
+200; unknown services return 404; Barnetrygd's landing does not contain the
+outdated Figma-only markers ("Godkjent", "Send vedlegg", "Oversikt over saken
+din", or landing "Historikk"); dagpenger/sykepenger stay unchanged.
 
 ## Files touched
 
