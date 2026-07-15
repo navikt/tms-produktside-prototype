@@ -1,0 +1,204 @@
+---
+// Saksoversikt – underside (prototype)
+// Lenket fra "Saksoversikt"-knappen i "Saken din"-kortet på tjenestesiden.
+import styles from "../_index.module.css";
+import data from "../../data/services.json";
+
+interface TimelineEvent {
+  title: string;
+  date: string;
+  links: string[];
+}
+interface MeldekortStep {
+  date: string;
+  title: string;
+  link?: string;
+  readMore?: string;
+}
+interface MeldekortCard {
+  heading: string;
+  steps: MeldekortStep[];
+}
+interface Saksoversikt {
+  oppsummert: string;
+  soknadHeading: string;
+  sectionHeading: string;
+  filters: { toggle: string[]; meldekortLabel: string };
+  meldekortHistorikk: MeldekortCard[];
+}
+interface Service {
+  title: string;
+  soknad: { events: TimelineEvent[] };
+  saksoversikt: Saksoversikt;
+}
+
+const services = data.services as Record<string, Service>;
+
+export function getStaticPaths() {
+  return Object.keys(data.services as Record<string, unknown>).map((service) => ({
+    params: { service },
+  }));
+}
+
+const { service } = Astro.params;
+const svc = services[service as string];
+if (!svc) {
+  return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
+}
+const { user } = data;
+const sak = svc.saksoversikt;
+const events = svc.soknad.events;
+const baseUrl = import.meta.env.BASE_URL;
+
+const checkmark = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 13l4 4 10-10" stroke="#202733" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const chevronDown = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="#005bb6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+---
+
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Saksoversikt – Min side</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,650;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class={styles.page}>
+      <!-- Meny -->
+      <header class={styles.meny}>
+        <div class={styles.logoRole}>
+          <span class={styles.logo}>NAV</span>
+          <span class={styles.divider}></span>
+          <span class={styles.role}>
+            {user.role}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="#49515e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <button class={styles.menyBtn} type="button">
+          Meny
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#005bb6" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+
+      <main class={styles.saksMain}>
+        <!-- Bruker -->
+        <div class={styles.user}>
+          <div class={styles.userText}>
+            <p class={styles.userName}>{user.name}</p>
+            <p class={styles.userStatus}>{user.status}</p>
+          </div>
+          <div class={styles.avatar} aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4.5 20a7.5 7.5 0 0115 0" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+
+        <div class={styles.subHeader}>
+          <!-- Brødsmuler -->
+          <nav class={styles.breadcrumb} aria-label="Brødsmulesti">
+            <a href="#">Min side</a>
+            <span>/</span>
+            <a href={`${baseUrl}/${service}`}>{svc.title}</a>
+          </nav>
+
+          <h1 class={styles.h1}>Saksoversikt</h1>
+        </div>
+
+        <div class={styles.saksContent}>
+          <!-- Oppsummert fra saken -->
+          <div class={styles.oppsummertCard}>
+            <p>{sak.oppsummert}</p>
+          </div>
+
+          <!-- Alt som har skjedd -->
+          <section class={styles.altSection} aria-label={sak.sectionHeading}>
+            <h2 class={styles.altHeading}>{sak.sectionHeading}</h2>
+
+            <!-- Filtre (statisk, kun visuelt) -->
+            <div class={styles.filters}>
+              <div class={styles.toggleGroup} role="group" aria-label="Sortering">
+                {sak.filters.toggle.map((label, i) => (
+                  <button
+                    type="button"
+                    class:list={[styles.toggleBtn, i === 1 && styles.toggleActive]}
+                    aria-pressed={i === 1 ? "true" : "false"}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div class={styles.switchWrap}>
+                <span class={styles.switchTrack} data-on aria-hidden="true">
+                  <span class={styles.switchThumb}></span>
+                </span>
+                <span class={styles.switchLabel}>{sak.filters.meldekortLabel}</span>
+              </div>
+            </div>
+
+            <!-- Søknad tidslinje -->
+            <article class={styles.timelineCard}>
+              <h3 class={styles.timelineCardHeading}>{sak.soknadHeading}</h3>
+              <ol class={styles.processList}>
+                {events.map((event, index) => (
+                  <li class={styles.processItem}>
+                    <div class={styles.processIndicator}>
+                      <span class={styles.processDot}>
+                        <Fragment set:html={checkmark} />
+                      </span>
+                      {index < events.length - 1 && <span class={styles.processLine}></span>}
+                    </div>
+                    <div class={styles.processBody}>
+                      <p class={styles.processTitle}>{event.title}</p>
+                      <p class={styles.processDate}>{event.date}</p>
+                      {event.links.length > 0 && (
+                        <div class={styles.processLinks}>
+                          {event.links.map((link) => (
+                            <a href={`${baseUrl}/${service}/dokument`}>{link}</a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </article>
+
+            <!-- Meldekort-historikk -->
+            {sak.meldekortHistorikk.map((card) => (
+              <article class={styles.meldekortCard}>
+                <h3 class={styles.meldekortCardHeading}>{card.heading}</h3>
+                <ol class={styles.dotList}>
+                  {card.steps.map((step, index) => (
+                    <li class={styles.dotItem}>
+                      <div class={styles.dotIndicator}>
+                        {index > 0 && <span class:list={[styles.dotLine, styles.dotLineTop]}></span>}
+                        <span class={styles.smallDot}></span>
+                        {index < card.steps.length - 1 && <span class={styles.dotLine}></span>}
+                      </div>
+                      <div class={styles.dotBody}>
+                        <p class={styles.dotDate}>{step.date}</p>
+                        <p class={styles.dotTitle}>{step.title}</p>
+                        {step.link && (
+                          <a class={styles.dotLink} href="#">{step.link}</a>
+                        )}
+                        {step.readMore && (
+                          <button class={styles.readMore} type="button">
+                            <Fragment set:html={chevronDown} />
+                            {step.readMore}
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </article>
+            ))}
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

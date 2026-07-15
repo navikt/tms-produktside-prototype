@@ -86,6 +86,33 @@
         "title": "Dokument/data",
         "placeholder": "Dokument eller data"
       },
+      "saksoversikt": {
+        "oppsummert": "Oppsummert fra saken",
+        "soknadHeading": "Søknad om dagpenger",
+        "sectionHeading": "Alt som har skjedd",
+        "filters": {
+          "toggle": ["Dato", "Hendelser"],
+          "meldekortLabel": "Vis meldekort"
+        },
+        "meldekortHistorikk": [
+          {
+            "heading": "Meldekort for uke 6 og 7",
+            "steps": [
+              { "date": "18 august 2025", "title": "Meldekort mottatt", "link": "Endre meldekortet" },
+              { "date": "19 august 2025", "title": "Meldekortet behandlet", "link": "Se resultat", "readMore": "Klage på avgjørelsen?" },
+              { "date": "20 august 2025", "title": "Utbetaling beregnes etter vedtak" }
+            ]
+          },
+          {
+            "heading": "Meldekort for uke 4 og 5",
+            "steps": [
+              { "date": "18 august 2025", "title": "Meldekort mottatt", "link": "Endre meldekortet" },
+              { "date": "19 august 2025", "title": "Meldekortet behandlet", "link": "Se resultat", "readMore": "Klage på avgjørelsen?" },
+              { "date": "20 august 2025", "title": "Utbetaling beregnes etter vedtak" }
+            ]
+          }
+        ]
+      },
       "tilpassetHeading": "Situasjonstilpasset innhold"
     },
     "sykepenger": {
@@ -139,6 +166,16 @@
       "dokument": {
         "title": "Dokument/data",
         "placeholder": "Dokument eller data"
+      },
+      "saksoversikt": {
+        "oppsummert": "Oppsummert fra saken",
+        "soknadHeading": "Søknad om sykepenger",
+        "sectionHeading": "Alt som har skjedd",
+        "filters": {
+          "toggle": ["Dato", "Hendelser"],
+          "meldekortLabel": "Vis meldekort"
+        },
+        "meldekortHistorikk": []
       },
       "tilpassetHeading": "Situasjonstilpasset innhold"
     }

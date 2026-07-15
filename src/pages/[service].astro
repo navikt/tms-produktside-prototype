@@ -139,7 +139,7 @@ const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none
                 <span class={styles.gaugeLabel}>{svc.sak.gaugeLabel}</span>
               </div>
             </div>
-            <a class={styles.btnSecondary} href="#">
+            <a class={styles.btnSecondary} href={`${baseUrl}/${service}/saksoversikt`}>
               {svc.sak.actionLabel}
               <Fragment set:html={chevronRight} />
             </a>
