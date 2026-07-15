@@ -546,3 +546,278 @@
   text-align: center;
   color: var(--ax-text-neutral);
 }
+
+/* Saksoversikt underside */
+.saksMain {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px 32px;
+}
+.saksMain .subHeader {
+  padding-top: 8px;
+}
+.saksContent {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  margin-top: 32px;
+}
+.oppsummertCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 315px;
+  padding: 20px 20px 32px;
+  background: var(--ax-bg-raised);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+}
+.oppsummertCard p {
+  margin: 0;
+  max-width: 301px;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.56;
+  text-align: center;
+  color: var(--ax-text-neutral);
+}
+.altSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.altHeading {
+  margin: 0;
+  font-weight: 650;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: -0.096px;
+  color: var(--ax-text-neutral);
+}
+
+/* Filtre (statisk) */
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.toggleGroup {
+  display: inline-flex;
+  padding: 1px;
+  border: 1px solid var(--ax-border-neutral);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.toggleBtn {
+  padding: 2px 12px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--ax-text-accent-subtle);
+  cursor: pointer;
+}
+.toggleBtn + .toggleBtn {
+  border-left: 1px solid var(--ax-border-neutral);
+}
+.toggleActive {
+  background: var(--ax-bg-accent-strong);
+  color: #fff;
+}
+.switchWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.switchTrack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  border-radius: 99px;
+  background: var(--ax-bg-accent-strong);
+}
+.switchThumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  background: #fff;
+  transform: translateX(16px);
+}
+.switchLabel {
+  font-size: 16px;
+  color: var(--ax-text-neutral);
+}
+
+/* Søknad tidslinjekort */
+.timelineCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: var(--ax-bg-default);
+  border-radius: 12px;
+}
+.timelineCardHeading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.02px;
+  color: var(--ax-text-accent);
+}
+.processList {
+  list-style: none;
+  margin: 0;
+  padding: 0 8px;
+}
+.processItem {
+  display: flex;
+  gap: 16px;
+}
+.processIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+  flex-shrink: 0;
+  padding-top: 8px;
+}
+.processDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--ax-border-subtle-a);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.processLine {
+  flex: 1;
+  width: 2px;
+  background: var(--ax-border-subtle-a);
+}
+.processBody {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0 32px;
+}
+.processTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--ax-text-neutral);
+}
+.processDate {
+  margin: 4px 0 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--ax-text-neutral-subtle);
+}
+.processLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+.processLinks a {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--ax-text-accent-subtle);
+}
+
+/* Meldekort-historikk (liten prikk-tidslinje) */
+.meldekortCard {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 12px;
+  background: var(--ax-bg-default);
+  border-radius: 12px;
+}
+.meldekortCardHeading {
+  margin: 0 0 16px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.02px;
+  color: var(--ax-text-accent);
+}
+.dotList {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;
+}
+.dotItem {
+  display: flex;
+  gap: 14px;
+}
+.dotIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 22px;
+  flex-shrink: 0;
+}
+.smallDot {
+  width: 12px;
+  height: 12px;
+  margin: 21px 0 3px;
+  border-radius: 99px;
+  background: var(--ax-border-neutral);
+  flex-shrink: 0;
+}
+.dotLine {
+  flex: 1;
+  width: 2px;
+  min-height: 8px;
+  background: var(--ax-border-subtle-a);
+}
+.dotLineTop {
+  flex: 0 0 16px;
+}
+.dotBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 17px 0 32px;
+}
+.dotDate {
+  margin: 0;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 20px;
+  letter-spacing: 0.036px;
+  color: var(--ax-text-neutral-subtle);
+}
+.dotTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--ax-text-neutral);
+}
+.dotLink {
+  font-size: 18px;
+  line-height: 20px;
+  letter-spacing: 0.036px;
+  color: var(--ax-text-accent-subtle);
+}
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px 12px 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--ax-text-accent-subtle);
+  cursor: pointer;
+}
