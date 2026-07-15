@@ -37,6 +37,9 @@ export function getStaticPaths() {
 const { service } = Astro.params;
 const svc = services[service as string];
 const { user } = data;
+if (!svc) {
+  return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
+}
 const soknad = svc.soknad;
 const baseUrl = import.meta.env.BASE_URL;
 
