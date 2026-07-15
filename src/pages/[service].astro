@@ -17,17 +17,27 @@ interface Service {
     heading: string;
     statusLines: string[];
     gaugeLabel: string;
-    actionLabel: string;
+    gaugeVariant?: "neutral";
+    actionLabel?: string;
+    tag?: string;
+    tagVariant?: "success" | "info" | "warning";
   };
   behandling: {
     title: string;
     subtitle: string;
     tag: string;
-    tagVariant: "success" | "info";
-    link: string;
+    tagVariant: "success" | "info" | "warning";
+    link?: string;
+    body?: string;
+    button?: { label: string; href: string };
   };
   sakActions: string[];
+  saksoversiktLink?: string;
   meldekort?: { heading: string; items: MeldekortItem[] };
+  historikk?: {
+    entries: { date: string; title: string; links: string[] }[];
+    seHeleLabel: string;
+  };
   tilpassetHeading: string;
 }
 
@@ -51,7 +61,20 @@ const baseUrl = import.meta.env.BASE_URL;
 const tagClass: Record<string, string> = {
   success: styles.tagSuccess,
   info: styles.tagInfo,
+  warning: styles.tagWarning,
 };
+
+// Barnetrygd uses the combined "Status" card with moderate-fill tags and a
+// neutral gauge. All of this is keyed off optional data so dagpenger/sykepenger
+// render exactly as before.
+const tagClassModerate: Record<string, string> = {
+  success: styles.statusTagSuccess,
+  info: styles.statusTagInfo,
+  warning: styles.statusTagWarning,
+};
+const combinedStatus = Boolean(svc.sak.tag);
+const gaugeFill = svc.sak.gaugeVariant === "neutral" ? "#e6e8eb" : "#f8e5dd";
+const gaugeStroke = svc.sak.gaugeVariant === "neutral" ? "#5d6573" : "#874e3b";
 
 const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="#0067C5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 ---
@@ -121,59 +144,91 @@ const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none
 
         <!-- Statuskort -->
         <section class={styles.statuskort} aria-label="Status">
-          <!-- Sak -->
-          <article class:list={[styles.card, styles.sak]}>
-            <h2 class={styles.h2}>{svc.sak.heading}</h2>
-            <div class={styles.sakStatus}>
-              <div class={styles.sakText}>
-                {svc.sak.statusLines.map((line) => <p>{line}</p>)}
+          <div class:list={[styles.statusGroup, combinedStatus && styles.statusGroupCombined]}>
+            <!-- Sak -->
+            <article class:list={combinedStatus ? [styles.statusPanel, styles.statusSak] : [styles.card, styles.sak]}>
+              {svc.sak.tag ? (
+                <div class={styles.statusHead}>
+                  <h2 class={styles.statusHeading}>{svc.sak.heading}</h2>
+                  <span class:list={[styles.statusTag, tagClassModerate[svc.sak.tagVariant ?? "success"]]}>
+                    {svc.sak.tag}
+                  </span>
+                </div>
+              ) : (
+                <h2 class={styles.h2}>{svc.sak.heading}</h2>
+              )}
+              <div class={styles.sakStatus}>
+                <div class={styles.sakText}>
+                  {svc.sak.statusLines.map((line) => <p>{line}</p>)}
+                </div>
+                <div class={styles.gauge} role="img" aria-label={svc.sak.gaugeLabel}>
+                  <svg viewBox="0 0 90 90" width="86" height="88" aria-hidden="true">
+                    <circle cx="45" cy="45" r="41" fill={gaugeFill} />
+                    <path
+                      d="M45 4a41 41 0 11-29 12"
+                      fill="none"
+                      stroke={gaugeStroke}
+                      stroke-width="6"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class:list={[styles.gaugeLabel, svc.sak.gaugeVariant === "neutral" && styles.gaugeLabelNeutral]}>
+                    {svc.sak.gaugeLabel}
+                  </span>
+                </div>
               </div>
-              <div class={styles.gauge} role="img" aria-label={svc.sak.gaugeLabel}>
-                <svg viewBox="0 0 90 90" width="86" height="88" aria-hidden="true">
-                  <circle cx="45" cy="45" r="41" fill="#f8e5dd" />
-                  <path
-                    d="M45 4a41 41 0 11-29 12"
-                    fill="none"
-                    stroke="#874e3b"
-                    stroke-width="6"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                <span class={styles.gaugeLabel}>{svc.sak.gaugeLabel}</span>
-              </div>
-            </div>
-            <a class={styles.btnSecondary} href={`${baseUrl}/${service}/saksoversikt`}>
-              {svc.sak.actionLabel}
-              <Fragment set:html={chevronRight} />
-            </a>
-          </article>
+              {svc.sak.actionLabel && (
+                <a class={styles.btnSecondary} href={`${baseUrl}/${service}/saksoversikt`}>
+                  {svc.sak.actionLabel}
+                  <Fragment set:html={chevronRight} />
+                </a>
+              )}
+            </article>
 
-          <!-- Behandling -->
-          <article class:list={[styles.card, styles.behandling]}>
-            <div class={styles.behandlingHeader}>
-              <div class={styles.behandlingTitle}>
-                <h2 class={styles.h2}>{svc.behandling.title}</h2>
-                <p class={styles.muted}>{svc.behandling.subtitle}</p>
+            <!-- Behandling -->
+            <article class:list={combinedStatus ? [styles.statusPanel, styles.statusBehandling] : [styles.card, styles.behandling]}>
+              <div class={styles.behandlingHeader}>
+                <div class={styles.behandlingTitle}>
+                  <h2 class:list={[styles.h2, combinedStatus && styles.behandlingTitleAccent]}>{svc.behandling.title}</h2>
+                  {svc.behandling.subtitle && <p class={styles.muted}>{svc.behandling.subtitle}</p>}
+                </div>
+                <span class:list={combinedStatus ? [styles.statusTag, tagClassModerate[svc.behandling.tagVariant]] : [styles.tag, tagClass[svc.behandling.tagVariant]]}>
+                  {svc.behandling.tag}
+                </span>
               </div>
-              <span class:list={[styles.tag, tagClass[svc.behandling.tagVariant]]}>
-                {svc.behandling.tag}
-              </span>
-            </div>
-            <a class={styles.behandlingLink} href={`${baseUrl}/${service}/soknad`}>
-              <span>{svc.behandling.link}</span>
-              <Fragment set:html={chevronRight} />
-            </a>
-          </article>
+              {svc.behandling.body && <p class={styles.behandlingBody}>{svc.behandling.body}</p>}
+              {svc.behandling.button && (
+                <a class:list={[styles.btnAccent, styles.btnAccentStart]} href={`${baseUrl}/${service}/${svc.behandling.button.href}`}>
+                  {svc.behandling.button.label}
+                </a>
+              )}
+              {svc.behandling.link && (
+                <a class={styles.behandlingLink} href={`${baseUrl}/${service}/soknad`}>
+                  <span>{svc.behandling.link}</span>
+                  <Fragment set:html={chevronRight} />
+                </a>
+              )}
+            </article>
+          </div>
 
           <!-- Sak actions -->
           <div class={styles.sakActions}>
             {svc.sakActions.map((label) => (
-              <a class:list={[styles.card, styles.action]} href="#">
+              <a class:list={[styles.card, styles.action, combinedStatus && styles.actionSoft]} href="#">
                 {label}
                 <Fragment set:html={chevronRight} />
               </a>
             ))}
           </div>
+          {svc.saksoversiktLink && (
+            <a
+              class:list={[styles.card, styles.action, styles.actionFull, combinedStatus && styles.actionSoft]}
+              href={`${baseUrl}/${service}/saksoversikt`}
+            >
+              {svc.saksoversiktLink}
+              <Fragment set:html={chevronRight} />
+            </a>
+          )}
         </section>
 
         <!-- Meldekort -->
@@ -212,6 +267,33 @@ const chevronRight = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none
             <div class:list={[styles.placeholder, styles.short]}></div>
           </div>
         </section>
+
+        <!-- Historikk -->
+        {svc.historikk && (
+          <section class={styles.historikk} aria-label="Historikk">
+            <h2 class={styles.h2}>Historikk</h2>
+            <ul class={styles.dotList}>
+              {svc.historikk.entries.map((e, i, arr) => (
+                <li class={styles.dotItem}>
+                  <div class={styles.dotIndicator}>
+                    <span class={styles.smallDot}></span>
+                    {i < arr.length - 1 && <span class={styles.dotLine}></span>}
+                  </div>
+                  <div class={styles.dotBody}>
+                    <p class={styles.dotDate}>{e.date}</p>
+                    <p class={styles.dotTitle}>{e.title}</p>
+                    <div class={styles.historikkLinks}>
+                      {e.links.map((l) => <a class={styles.dotLink} href="#">{l}</a>)}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <a class={styles.seHele} href={`${baseUrl}/${service}/saksoversikt`}>
+              {svc.historikk.seHeleLabel}
+            </a>
+          </section>
+        )}
       </main>
     </div>
   </body>

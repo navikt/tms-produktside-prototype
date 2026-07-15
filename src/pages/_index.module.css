@@ -16,6 +16,9 @@
   --ax-bg-neutral-soft: rgba(0, 26, 51, 0.04); /* bg-neutral-softA */
   --ax-info-100: #eef6fc;
   --ax-bg-canvas: #d8dee5; /* off-column page backdrop (not an Aksel token) */
+  --ax-surface-soft: #f5f6f7; /* solid soft-grey card surface (Barnetrygd) */
+  --ax-bg-success-moderate: #d5f6db;
+  --ax-bg-warning-moderate: #ffebc7;
 
   /* Colors — text */
   --ax-text-neutral: #202733;
@@ -23,6 +26,7 @@
   --ax-text-accent: #002459;
   --ax-text-accent-subtle: #005bb6;
   --ax-text-accent-contrast: #ffffff;
+  --ax-text-info: #002942;
   --ax-text-logo: #c30000; /* Nav red — logo only, never for UI actions */
 
   /* Colors — brand & action */
@@ -850,4 +854,125 @@
   line-height: 24px;
   color: var(--ax-text-accent-subtle);
   cursor: pointer;
+}
+
+/* ===== Barnetrygd — combined status card, moderate tags, landing historikk =====
+   All classes below are additive; dagpenger/sykepenger keep their existing
+   look. Values follow the Figma "Barnetrygd" frame and DESIGN.md tokens. */
+
+/* Combined status card: two joined panels on a soft-grey surface. In the
+   non-combined case .statusGroup is a transparent wrapper matching the old
+   16px gap so the other services render unchanged. */
+.statusGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.statusGroupCombined {
+  gap: 2px;
+  border-radius: var(--ax-radius-md);
+  overflow: hidden;
+}
+.statusPanel {
+  background: var(--ax-surface-soft);
+}
+.statusSak {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 20px 32px;
+  border-radius: 0 0 var(--ax-radius-sm) var(--ax-radius-sm);
+}
+.statusBehandling {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px 24px;
+  border-radius: var(--ax-radius-sm) var(--ax-radius-sm) 0 0;
+}
+.statusHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.statusHeading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.6875rem; /* 27px, bespoke status heading */
+  line-height: 2rem;
+  letter-spacing: -0.054px;
+  color: var(--ax-text-neutral);
+}
+.behandlingTitleAccent {
+  color: var(--ax-text-accent);
+}
+.behandlingBody {
+  margin: 0;
+  font-size: var(--ax-font-size-body-medium);
+  line-height: 1.32;
+  color: var(--ax-text-neutral);
+}
+.btnAccentStart {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Moderate-fill tags (Aksel bg-*-moderate) used inside the status card */
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: var(--ax-radius-sm);
+  font-size: var(--ax-font-size-body-medium);
+  line-height: 24px;
+  white-space: nowrap;
+}
+.statusTagSuccess {
+  background: var(--ax-bg-success-moderate);
+  color: var(--ax-text-info);
+}
+.statusTagWarning {
+  background: var(--ax-bg-warning-moderate);
+  color: var(--ax-text-info);
+}
+.statusTagInfo {
+  background: var(--ax-info-100);
+  color: var(--ax-text-info);
+}
+
+/* Neutral gauge label (Barnetrygd) — decorative, outside design tokens */
+.gaugeLabelNeutral {
+  color: #5d6573;
+}
+
+/* Sak-action cards on the soft surface (no white card/shadow) */
+.actionSoft {
+  background: var(--ax-surface-soft);
+  box-shadow: none;
+}
+.actionFull {
+  flex: none;
+  width: 100%;
+}
+
+/* Historikk on the landing page — reuses the small-dot timeline */
+.historikk {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.historikkLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.seHele {
+  align-self: flex-start;
+  font-size: var(--ax-font-size-body-medium);
+  color: var(--ax-text-accent-subtle);
 }

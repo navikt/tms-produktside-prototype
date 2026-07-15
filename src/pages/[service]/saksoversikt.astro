@@ -46,9 +46,6 @@ if (!svc) {
   return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
 }
 const { user } = data;
-if (!svc) {
-  return new Response(`Ukjent tjeneste: ${service}`, { status: 404 });
-}
 const sak = svc.saksoversikt;
 const events = svc.soknad.events;
 const baseUrl = import.meta.env.BASE_URL;
