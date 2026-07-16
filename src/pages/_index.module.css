@@ -851,3 +851,95 @@
   color: var(--ax-text-accent-subtle);
   cursor: pointer;
 }
+
+/* Figma landing variant used by AAP. Layout follows the Figma frame, colors use
+   the shared token set so the service stays unified with the rest of the app. */
+.figmaStatusGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-radius: var(--ax-radius-md);
+  overflow: hidden;
+}
+.figmaPanel {
+  background: var(--ax-bg-neutral-soft);
+}
+.figmaSakPanel {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  padding: 20px;
+}
+.figmaStatusHeading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.6875rem;
+  line-height: 2rem;
+  letter-spacing: -0.054px;
+  color: var(--ax-text-neutral);
+}
+.figmaBehandlingPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 208px;
+  padding: 16px 20px 24px;
+  border-radius: var(--ax-radius-sm) var(--ax-radius-sm) var(--ax-radius-md) var(--ax-radius-md);
+}
+.figmaBehandlingBody {
+  margin: 0;
+  font-size: var(--ax-font-size-body-medium);
+  line-height: 1.32;
+  color: var(--ax-text-neutral);
+}
+.figmaButton {
+  align-self: flex-start;
+  display: inline-flex;
+  text-decoration: none;
+}
+.figmaActionCard {
+  background: var(--ax-bg-neutral-soft);
+  box-shadow: none;
+}
+.figmaOverviewAction {
+  width: 100%;
+  background: var(--ax-bg-neutral-soft);
+  box-shadow: none;
+}
+.figmaMeldekort {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.figmaMeldekortCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  border-radius: var(--ax-radius-md);
+}
+.figmaMeldekortRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 16px 20px;
+  background: var(--ax-bg-neutral-soft);
+}
+.figmaMeldekortAction {
+  align-items: flex-start;
+  flex-direction: column;
+  min-height: 172px;
+  padding: 20px 20px 32px;
+  border-radius: var(--ax-radius-sm);
+}
+.figmaHistorikk {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.figmaHistorikkLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
