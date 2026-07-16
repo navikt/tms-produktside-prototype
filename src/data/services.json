@@ -236,6 +236,111 @@
         "meldekortHistorikk": []
       },
       "tilpassetHeading": "Situasjonstilpasset innhold"
+    },
+    "aap": {
+      "title": "AAP",
+      "landingVariant": "figmaStatus",
+      "sak": {
+        "heading": "Status i saken din",
+        "statusLines": [],
+        "gaugeLabel": "..."
+      },
+      "behandling": {
+        "title": "Søknad",
+        "subtitle": "Mottatt 16. august.",
+        "tag": "Venter på deg",
+        "tagVariant": "warning",
+        "link": "Vi mangler 2 vedlegg fra deg",
+        "body": "Vi mangler 2 vedlegg fra deg. Frist for å ettersende dem er 30. august.",
+        "button": { "label": "Send vedlegg", "href": "dokument" }
+      },
+      "sakActions": ["Meld endring", "Send klage"],
+      "saksoversiktLink": "Oversikt over saken din",
+      "meldekort": {
+        "heading": "Meldekort",
+        "items": [
+          {
+            "heading": "Timer uke 6 og 7",
+            "period": "2. februar - 15. februar",
+            "meta": "Send om 16 dager",
+            "state": "upcoming"
+          },
+          {
+            "heading": "Periode 2. feb - 15. feb",
+            "period": "Frist mandag",
+            "state": "action"
+          },
+          {
+            "heading": "Timer uke 2 og 3",
+            "period": "Utbetalt 19 450,-",
+            "meta": "19 450,-",
+            "state": "done"
+          },
+          {
+            "heading": "Timer uke 1 og 2",
+            "period": "Utbetalt 16 450,-",
+            "meta": "16 450,-",
+            "state": "done"
+          }
+        ]
+      },
+      "historikk": {
+        "heading": "Historikk",
+        "entries": [
+          {
+            "date": "20 august 2025",
+            "title": "Søknad mottatt",
+            "links": ["Se søknaden", "Trekk søknaden"]
+          }
+        ],
+        "seHeleLabel": "Se hele saksoversikten"
+      },
+      "soknad": {
+        "referanse": "305 884 721",
+        "mottatt": "16. august 2025",
+        "status": "Venter på deg",
+        "statusVariant": "warning",
+        "forventetSvar": "30. august",
+        "infoBox": "Informasjon om status",
+        "dokBox": "Sende dokumentasjon",
+        "timelineHeading": "Dette har skjedd",
+        "events": [
+          {
+            "title": "Vi har mottatt søknaden din om AAP",
+            "date": "16 august 2025",
+            "links": ["Se søknaden", "Trekk søknaden"]
+          },
+          {
+            "title": "Vi mangler 2 vedlegg fra deg",
+            "date": "16 august 2025",
+            "links": ["Send vedlegg"]
+          }
+        ]
+      },
+      "dokument": {
+        "title": "Dokument/data",
+        "placeholder": "Dokument eller data"
+      },
+      "saksoversikt": {
+        "oppsummert": "Oppsummert fra saken",
+        "soknadHeading": "Søknad om AAP",
+        "sectionHeading": "Alt som har skjedd",
+        "filters": {
+          "toggle": ["Dato", "Hendelser"],
+          "meldekortLabel": "Vis meldekort"
+        },
+        "meldekortHistorikk": [
+          {
+            "heading": "Meldekort for uke 6 og 7",
+            "steps": [
+              { "date": "18 august 2025", "title": "Meldekort mottatt", "link": "Endre meldekortet" },
+              { "date": "19 august 2025", "title": "Meldekortet behandlet", "link": "Se resultat", "readMore": "Klage på avgjørelsen?" },
+              { "date": "20 august 2025", "title": "Utbetaling beregnes etter vedtak" }
+            ]
+          }
+        ]
+      },
+      "tilpassetHeading": "Situasjonstilpasset innhold"
     }
   }
 }
